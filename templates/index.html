@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF 자동작성</title>
+</head>
+<body>
+  <h2>간단한 PDF 자동 작성</h2>
+  <input id="surname" placeholder="Surname"><br>
+  <input id="givenname" placeholder="Givenname"><br>
+  <button onclick="submitForm()">PDF 생성</button>
+
+  <p id="result"></p>
+
+  <script>
+    function submitForm() {
+      const data = {
+        lang_code: "en",
+        form_data: {
+          Surname: document.getElementById("surname").value,
+          Givenname: document.getElementById("givenname").value,
+          Year: "1990",
+          month: "01",
+          day: "01",
+          boy: "y",
+          nationality: "USA",
+          passport_no: "A1234567"
+        }
+      };
+
+      fetch("/fill_pdf_api", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(json => {
+        document.getElementById("result").innerText = json.message || json.error;
+      });
+    }
+  </script>
+</body>
+</html>
